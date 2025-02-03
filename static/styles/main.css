@@ -1,0 +1,332 @@
+/* General styles */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #121212; 
+    color: #E0E0E0; 
+}
+
+/*Sub-sections*/
+.container{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*Header*/
+
+header {
+    background-color: #1C1C1C; 
+    height: 80px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+header h1 a {
+    color: #E0E0E0;
+    text-decoration: none;
+    font-size: 28px;
+}
+
+header h1 a:hover {
+    color: #007AFF; 
+}
+
+/*Nav*/
+nav {
+    background-color: #1C1C1C; 
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.navContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 20px;
+}
+
+/*The box around each nav part*/
+.navBox {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    flex-grow: 1;
+}
+
+/*Links inside of the nav*/
+.navBox a {
+    color: #E0E0E0;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 15px;
+    padding: 10px 15px;
+    border-radius: 4px; 
+    transition: all 0.3s ease;
+}
+
+.navBox a:hover {
+    background-color: #007AFF; 
+    color: white; 
+    border-radius: 5px; 
+}
+
+.navBox a.active {
+    color: #007AFF;
+    font-weight: bold;
+}
+
+/* Button in the navbar */
+.navBox button {
+    background-color: #007AFF; 
+    color: white; 
+    border: 2px solid #007AFF; 
+    padding: 12px 20px; 
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 40px; 
+}
+
+.navBox button:hover {
+    background-color: #005BB5; 
+    border: 2px solid #005BB5; 
+}
+
+/*Main*/
+
+main{
+    background-color: #121212; 
+    text-align: center;
+    padding: 10px 0;
+}
+
+.mainName{
+    color: #E0E0E0;
+    padding-top: 20px;
+    font-size: 35px;
+    font-weight: bold;
+    font-stretch: condensed;
+}
+
+/* Search Bar */
+.searchbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    background-color: #2D2D2D;
+    border-radius: 5px;
+    padding: 4px 10px; 
+    margin: 0 15px;
+    border: 1px solid #007AFF;
+    transition: border-color 0.3s ease;
+    height: 40px;
+    width: 700px;
+    margin-left: 500px;
+    margin-top: 20px;
+}
+
+.searchbar input {
+    background-color: #2D2D2D;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    padding: 4px 6px; 
+    border-radius: 4px;
+    width: 625px; 
+}
+
+.searchbar input:focus {
+    outline: none;
+    border-color: #007AFF;
+}
+
+.searchbar button {
+    background-color: #007AFF;
+    color: white;
+    padding: 4px 10px; 
+    border: none;
+    border-radius: 4px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.searchbar button:hover {
+    background-color: #005BB5;
+}
+
+/*Passage at front of page*/
+.entryHeader{
+    color: #E0E0E0;
+    font-size: 30px;
+    word-wrap: break-word;
+    font-weight: bold;
+    text-align: center;
+}
+
+.entrySub{
+    color: #E0E0E0;
+    padding-top: 10px;
+    font-size: 15px;
+}
+
+/*Section*/
+
+section{
+    color: #E0E0E0;
+    background-color: #2D2D2D;
+    height: 700px;
+    width: 100%;
+    text-align: center;
+}
+
+/*Box which goes around sponsered products*/
+.sponseredProductsBox{
+    margin-top: 10px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 30px;
+    width: 1500px;
+}
+
+.sponseredProductsContents{
+    display:flex;
+    justify-content: space-around;
+}
+
+.sponseredProductsContents li {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sponseredProductsContents li {
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px; 
+    border-radius: 5px; 
+    transition: background-color 0.3s ease;
+}
+
+.sponseredProductsContents li p {
+    margin: 5px 0;
+    color: #E0E0E0; 
+}
+
+.sponseredProductsContents li strong {
+    color: #007AFF;
+}
+
+
+.sponseredProductsContents li:hover{
+    background-color: #3A4A5A; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/*Recommendation algorithm area*/
+.recommendationTitle{
+    padding-top: 60px;
+    font-size: 15px;
+}
+
+.recommendationButton{
+    padding-top: 5px;
+}
+
+.recommendationButton button {
+    background-color: #007AFF; 
+    color: white; 
+    border: 2px solid #007AFF; 
+    padding: 12px 20px; 
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 40px; 
+}
+
+.recommendationButton button:hover {
+    background-color: #005BB5; 
+    border: 2px solid #005BB5; 
+}
+
+/* Footer */
+/*Box around footer*/
+footer {
+    background-color: #1C1C1C; 
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+footer .footerContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/*Columns in footer*/
+footer .footerColumn {
+    width: 22%;
+    margin-bottom: 20px;
+}
+
+/*Header of columns within footer*/
+footer .footerColumn h3 {
+    color: #fff; 
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+/*Elements of list inside of columns of footer*/
+footer ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+footer ul li {
+    margin-bottom: 10px;
+}
+
+footer ul li a {
+    color: #007AFF;
+    text-decoration: none;
+}
+
+footer ul li a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/*Copyright and brand name*/
+footer .footerBottom {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
+    color: #aaa;
+}
