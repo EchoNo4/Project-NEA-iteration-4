@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/productPageStyle.css') }}">
+</head>
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <header>
+            <div>
+                <h1><a href="{{ url_for('home') }}">SEARCH<span style="color: orange;">IT</span>.COM</a></h1>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav>
+            <div class="navContainer">
+                <!--Nav links-->
+                <div class="navBox">
+                    <a href="{{ url_for('search') }}">Search</a>
+                    <a href="#">Discover</a>
+                    <a href="#">Special</a>
+                    <a href="#">Popular</a>
+                </div>
+                <!--Nav search bar-->
+                <div class="searchbar">
+                    <form action="/search" method="post">
+                        <input type="text" name="query" placeholder="Search here..." id="searchInput" />
+                        <button type="submit">
+                            <img src="{{ url_for('static', filename='images/magnifying-glass.png') }}" alt="Search" height="20px">
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Section -->
+        <main>
+            <div class="mainContainer">
+                <!-- Product Details -->
+                <div class="resultsBox productDetails">
+                    <h2>{{ product['name'] }}</h2>
+                    <div class="productContainer">
+                        <img src="{{ url_for('static', filename='images/' + product['picture']) }}" alt="{{ product['name'] }}" class="productImage">
+                        <div class="productInfo">
+                            <p><strong>Brand:</strong> {{ product['brand'] }}</p>
+                            <p><strong>Price:</strong> £{{ product['price'] }}</p>
+                            <p><strong>Promotion:</strong> {{ product['promotion?'] }}</p>
+                            <p><strong>Rating:</strong> {{ product['review'] }} stars</p>
+                            <p><strong>Description:</strong> {{ product['description'] }}</p>
+                            <button onclick="window.location.href='{{ product['link'] }}'" class="btn buyNow">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footerContainer">
+                <div class="footerColumn">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About us</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="#">Product Sources</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h3>Account</h3>
+                    <ul>
+                        <li><a href="#">Log In</a></li>
+                        <li><a href="#">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footerBottom">
+                    <p>©2025 Searchit.com. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

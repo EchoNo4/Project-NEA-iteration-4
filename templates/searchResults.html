@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/searchResultsStyle.css') }}">
+</head>
+    <script>
+        // Toggle collapse and store the state in localStorage
+        function toggleCollapse(filterId) {
+            const filterContent = document.getElementById(filterId);
+            const arrow = document.getElementById(filterId + "Arrow"); // Get the arrow element
+            const isCollapsed = filterContent.style.display === 'none';
+            
+            // Toggle visibility of the filter content
+            filterContent.style.display = isCollapsed ? 'block' : 'none';
+
+            // Toggle the arrow direction
+            arrow.innerHTML = isCollapsed ? '&#9650;' : '&#9660;'; // Change arrow symbol (up/down)
+
+            // Save collapse state in localStorage
+            localStorage.setItem(filterId, isCollapsed ? 'expanded' : 'collapsed');
+        }
+
+        // Restore collapse state on page load
+        function restoreCollapseState() {
+            const filterGroups = document.querySelectorAll('.filterGroup');
+            filterGroups.forEach((group) => {
+                const filterId = group.dataset.filterId;
+                const state = localStorage.getItem(filterId);
+                const filterContent = document.getElementById(filterId);
+                const arrow = document.getElementById(filterId + "Arrow");
+
+                // If the state is collapsed, hide the content and set the arrow to up (&#9650;)
+                if (state === 'collapsed' || filterContent.style.display === 'none') {
+                    filterContent.style.display = 'none';
+                    arrow.innerHTML = '&#9650;'; // Up arrow for collapsed state
+                } else {
+                    // If the state is expanded, show the content and set the arrow to down (&#9660;)
+                    filterContent.style.display = 'block';
+                    arrow.innerHTML = '&#9660;'; // Down arrow for expanded state
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', restoreCollapseState);
+    </script>
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <header>
+            <div>
+                <h1><a href="{{ url_for('home') }}">SEARCH<span style="color: orange;">IT</span>.COM</a></h1>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav>
+            <div class="navContainer">
+                <!--Nav links-->
+                <div class="navBox">
+                    <a href="{{ url_for('search') }}">Search</a>
+                    <a href="#">Discover</a>
+                    <a href="#">Special</a>
+                    <a href="#">Popular</a>
+                    <button onclick="random()">Random??</button>
+                </div>
+                <!--Nav search bar-->
+                <div class="searchbar">
+                    <form action="/search" method="post">
+                        <input type="text" name="query" placeholder="Search here..." id="searchInput" />
+                        <button type="submit">
+                            <img src="{{ url_for('static', filename='images/magnifying-glass.png') }}" alt="Search" height="20px">
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        
+        <!-- Main Section -->
+        <main>
+            <div class="mainContainer">
+                <!-- Filters Column -->
+                <div class="filtersBox">
+                    <h2>Filters</h2>
+                    <form method="POST" action="{{ url_for('search') }}">
+                        <input type="hidden" name="query" value="{{ query or '' }}">
+                        <!--All filters-->
+                        {% for column, values in filter_options.items() %}
+                            {% if column in allowed_columns %}
+                            <div class="filterGroup" data-filter-id="{{ column }}">
+                                <h4 onclick="toggleCollapse('{{ column }}')">
+                                    {{ column }} <span id="{{ column }}Arrow">&#9660;</span>
+                                </h4>
+                                <div id="{{ column }}" class="filterContent">
+                                    {% for value in values %}
+                                        <label>
+                                            <input type="checkbox" name="{{ column }}" value="{{ value }}"
+                                                {% if value in filters.get(column, []) %} checked {% endif %}>
+                                            {{ value }}
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        <!--Price range filter-->
+                        <div class="filterGroup" data-filter-id="priceRange">
+                            <h4 onclick="toggleCollapse('priceRange')">
+                                Price Range <span id="priceRangeArrow">&#9660;</span>
+                            </h4>
+                            <div id="priceRange" class="filterContent">
+                                <label for="min_price">Min Price:</label>
+                                <input type="number" name="min_price" step="0.01" value="{{ min_price or '' }}">
+                                <label for="max_price">Max Price:</label>
+                                <input type="number" name="max_price" step="0.01" value="{{ max_price or '' }}">
+                            </div>
+                        </div>
+                
+                        <button type="submit" class="btn">Apply Filters</button>
+                    </form>
+                </div>
+
+                <!-- Results -->
+                <div class="resultsBox">
+                    <h2>Search Results</h2>
+                    <ul class="resultsList">
+                        <!--Repeat till all results are returned-->
+                        {% for result in results %}
+                        <li class="resultItem" onclick="window.location.href='{{ url_for('product', product_id=result['id']) }}';">
+                            <img src="{{ url_for('static', filename='images/' + result['picture']) }}" alt="Product Image">
+                            <div class="resultDetails">
+                                <p><strong>Name:</strong> {{ result['name'] }}</p>
+                                <p><strong>Brand:</strong> {{ result['brand'] }}</p>
+                                <p><strong>Promotion:</strong> {{ result['promotion?'] }}</p>
+                                <p><strong>Price:</strong> £{{ result['price'] }}</p>
+                                <p><strong>Review:</strong> {{ result['review'] }} stars</p>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footerContainer">
+                <div class="footerColumn">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About us</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="#">Product Sources</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h3>Account</h3>
+                    <ul>
+                        <li><a href="#">Log In</a></li>
+                        <li><a href="#">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footerBottom">
+                    <p>©2025 Searchit.com. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Searchit</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+</head>
+<body>
+    <div class="container">
+
+        <!--Header-->
+        <header>
+            <div>
+                <h1><a href="{{ url_for('home') }}">SEARCH<span style="color: orange;">IT</span>.COM</a></h1>
+            </div>
+        </header>
+
+        <!--Nav-->
+        <nav>
+            <div class="navContainer">
+                <!--Nav links-->
+                <div class="navBox">
+                    <a href="#">Discover</a>
+                    <a href="#">Search</a>
+                    <a href="#">Special</a>
+                    <a href="#">Popular</a>
+                    <button onclick="random()">Random??</button>
+                </div>
+            </div>
+        </nav>
+
+        <!--Main-->
+        <main>
+            <!--Beginning passage-->
+            <div class="mainName">Search<span style="color: orange;">it</span></div>
+            <div class="entryHeader">Search Products. Find the best deals.</div>
+            <div class="entryHeader"><i>Find your Product.</i></div>
+            <div class="entrySub">
+              A place where you can find what you are looking for.
+            </div>
+            <!--Search bar-->
+            <div class="searchbar">
+                <form action="/search" method="post">
+                    <input type="text" name="query" placeholder="Search here..." id="searchInput" />
+                    <button type="submit">
+                        <img src="{{ url_for('static', filename='images/magnifying-glass.png') }}" alt="Search" height="20px">
+                    </button>
+                </form>
+            </div>
+            <!--Screenshot of the site-->
+            <div class="screenshotBox screenshotBoxInside" style="margin-top: 80px; width: 950px;">
+              <span><img src="{{ url_for('static', filename='images/screenshot of site.png') }}" alt="Screenshot Of Site Image" style="height: 400px; width: 950px; padding-left: 400px;"></span>
+            </div>
+        </main>
+
+        <!--Section-->
+        <section>
+            <div style="padding:1px;"></div>
+            <!--Sponsered products box-->
+            <div class="sponseredProductsBox", style="display: flex;">
+
+                {% for item in [item1, item2, item3, item4] %}
+                    <div class="sponseredProductsContents">
+                        <li onclick="window.location.href='{{ url_for('product', product_id=item['id']) }}';">
+                            <img src="{{ url_for('static', filename='images/' + item['picture']) }}" alt="Product Image" style="height: 350px; width: 350px;">
+                        <div class="resultDetails">
+                            <p><strong>Name:</strong> {{ item['name'] }}</p>
+                            <p><strong>Promotion:</strong> {{ item['promotion?'] }}</p>
+                            <p><strong>Price:</strong> £{{ item['price'] }}</p>
+                            <p><strong>Review:</strong> {{ item['review'] }} stars</p>
+                        </div>
+                        </li>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!--Recommendation algorithm area-->
+            <div class="recommendationTitle">Need some help?</div>
+            <div class="recommendationButton">
+                <a href="{{ url_for('recommendation') }}">
+                    <button> Click this to find what you need</button>
+                </a>
+            </div>
+        </section>
+
+        <!--Footer-->
+        <footer>
+            <div class="footerContainer">
+                <div class="footerColumn">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About us</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="#">Product Sources</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h3>Account</h3>
+                    <ul> 
+                        <li><a href="#">Log In</a></li>
+                        <li><a href="#">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footerBottom">
+                    <p>©2025 Searchit.com. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>

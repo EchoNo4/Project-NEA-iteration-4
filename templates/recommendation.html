@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Searchit</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/recommendationStyle.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div>
+                <h1><a href="{{ url_for('home') }}">SEARCH<span style="color: orange;">IT</span>.COM</a></h1>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav>
+            <div class="navContainer">
+                <!--Nav links-->
+                <div class="navBox">
+                    <a href="#">Discover</a>
+                    <a href="#">Search</a>
+                    <a href="#">Special</a>
+                    <a href="#">Popular</a>
+                    <button onclick="random()">Random??</button>
+                </div>
+                <!--Nav search bar-->
+                <div class="searchbar">
+                    <form action="/search" method="post">
+                        <input type="text" name="query" placeholder="Search here..." id="searchInput" />
+                        <button type="submit">
+                            <img src="{{ url_for('static', filename='images/magnifying-glass.png') }}" alt="Search" height="20px">
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main>
+            <h1>Help Me Choose</h1>
+            <div id="questionnaire">
+                <!-- Step 1: Category -->
+                <div id="step-category" class="step">
+                    <label for="category">Choose a category:</label>
+                    <select id="category"></select>
+                    <div class="step-buttons">
+                        <button class="prev-button hidden">Back</button>
+                        <button id="next-category" class="next-button">Next</button>
+                    </div>
+                </div>
+        
+                <!-- Step 2: Brand -->
+                <div id="step-brand" class="step hidden">
+                    <label for="brand">Choose a brand:</label>
+                    <select id="brand"></select>
+                    <div class="step-buttons">
+                        <button class="prev-button">Back</button>
+                        <button id="next-brand" class="next-button">Next</button>
+                    </div>
+                </div>
+        
+                <!-- Step 3: Budget -->
+                <div id="step-budget" class="step hidden">
+                    <label for="min-budget">Minimum budget:</label>
+                    <input id="min-budget" type="number" placeholder="Min">
+                    <label for="max-budget">Maximum budget:</label>
+                    <input id="max-budget" type="number" placeholder="Max">
+                    <div class="step-buttons">
+                        <button class="prev-button">Back</button>
+                        <button id="next-budget" class="next-button">Next</button>
+                    </div>
+                </div>
+        
+                <!-- Step 4: Reviews -->
+                <div id="step-reviews" class="step hidden">
+                    <label for="min-review">Minimum review score:</label>
+                    <input id="min-review" type="number" placeholder="Min">
+                    <div class="step-buttons">
+                        <button class="prev-button">Back</button>
+                        <button id="next-reviews" class="next-button">Next</button>
+                    </div>
+                </div>
+        
+                <!-- Step 5: Promotion -->
+                <div id="step-promotion" class="step hidden">
+                    <label for="promotion">Promotion only:</label>
+                    <select id="promotion">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <div class="step-buttons">
+                        <button class="prev-button">Back</button>
+                        <button id="submit-button" class="hidden">Submit</button>
+                    </div>
+                    <button id="retry-button" class="hidden">Retry</button>
+                </div>
+        
+                <!-- Recommendations -->
+                <h2>Recommendations:</h2>
+                <ul id="recommendations"></ul>
+            </div>
+        </main>
+        
+
+        <!-- Footer -->
+        <footer>
+            <div class="footerContainer">
+                <div class="footerColumn">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About us</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="#">Product Sources</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h3>Account</h3>
+                    <ul> 
+                        <li><a href="#">Log In</a></li>
+                        <li><a href="#">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footerBottom">
+                    <p>©2025 Searchit.com. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const steps = Array.from(document.querySelectorAll('.step'));
+            const nextButtons = Array.from(document.querySelectorAll('.next-button'));
+            const prevButtons = Array.from(document.querySelectorAll('.prev-button'));
+            const submitButton = document.getElementById('submit-button');
+            const retryButton = document.getElementById('retry-button');
+            const recommendationsList = document.getElementById('recommendations');
+            const recommendationsHeading = document.querySelector('h2');
+
+             // Current step tracker
+            let currentStep = 0;
+
+            try {
+                // Fetch questions from the backend
+                const response = await fetch('/get-questions');
+                const { categories, brands } = await response.json();
+
+                const categoryDropdown = document.getElementById('category');
+                categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat;
+                    option.textContent = cat;
+                    categoryDropdown.appendChild(option);
+                });
+
+                 // Populate dropdowns
+                const brandDropdown = document.getElementById('brand');
+                brands.forEach(br => {
+                    const option = document.createElement('option');
+                    option.value = br;
+                    option.textContent = br;
+                    brandDropdown.appendChild(option);
+                });
+
+                 // Navigation logic
+                function showStep(stepIndex) {
+                    steps.forEach((step, index) => {
+                        step.classList.toggle('hidden', index !== stepIndex);
+                    });
+
+                    prevButtons.forEach(button => button.classList.toggle('hidden', stepIndex === 0));
+                    
+                    nextButtons.forEach((button, index) => {
+                        button.classList.toggle('hidden', index !== stepIndex);
+                    });
+
+                    submitButton.classList.toggle('hidden', stepIndex !== steps.length - 1);
+                }
+
+                // Show/hide next buttons
+                nextButtons.forEach((button, index) => {
+                    button.addEventListener('click', () => {
+                        if (currentStep < steps.length - 1) {
+                            currentStep++;
+                            showStep(currentStep);
+                        }
+                    });
+                });
+
+                prevButtons.forEach((button) => {
+                    button.addEventListener('click', () => {
+                        if (currentStep > 0) {
+                            currentStep--;
+                            showStep(currentStep);
+                        }
+                    });
+                });
+
+                // Submit button logic
+                submitButton.addEventListener('click', async () => {
+                    const filters = {
+                        category: document.getElementById('category').value,
+                        brand: document.getElementById('brand').value,
+                        minBudget: document.getElementById('min-budget').value,
+                        maxBudget: document.getElementById('max-budget').value,
+                        minReview: document.getElementById('min-review').value,
+                        promotion: document.getElementById('promotion').value,
+                    };
+
+                    try {
+                        const res = await fetch('/recommend', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(filters),
+                        });
+
+                        if (!res.ok) throw new Error('Failed to fetch recommendations');
+
+                        // Show the recommendations heading after submission
+                        const recommendations = await res.json();
+                        recommendationsHeading.style.display = 'block';
+                        recommendationsList.innerHTML = recommendations.length > 0
+                            ? recommendations.map(r => {
+                                const imageUrl = `{{ url_for('static', filename='images/') }}${r.picture}`;
+                                return `
+                                    <li>
+                                        <a href="/product/${r.id}">
+                                            <img src="${imageUrl}" alt="${r.name}">
+                                            <h3>${r.name}</h3>
+                                            <p>${r.description}</p>
+                                            <span class="price">£${r.price}</span>
+                                        </a>
+                                    </li>
+                                `;
+                            }).join('')
+                            : '<li>No products match your criteria.</li>';
+
+                        // Hide the Back and Submit buttons
+                        submitButton.classList.add('hidden');
+                        retryButton.classList.remove('hidden');  // Show the Retry button
+                    } catch (error) {
+                        console.error('Error fetching recommendations:', error);
+                        alert('There was an error processing your request. Please try again.');
+                    }
+                });
+
+                // Retry button logic
+                retryButton.addEventListener('click', () => {
+                    // Reset the form
+                    currentStep = 0;
+                    showStep(currentStep);
+                    recommendationsList.innerHTML = ''; // Clear recommendations
+                    // Hide the Retry button
+                    retryButton.classList.add('hidden');
+                    submitButton.classList.remove('hidden'); // Show Back and Submit buttons again
+                });
+
+                // Initial setup
+                showStep(currentStep);
+            } catch (error) {
+                console.error('Error fetching questions:', error);
+                alert('Unable to load questions. Please refresh the page.');
+            }
+        });
+
+    </script>
+</body>
+</html>
