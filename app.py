@@ -1,3 +1,5 @@
+# This is the main back-end of the website function, which handles all of the data processing
+
 #Importing applications
 from flask import Flask, render_template, request, jsonify
 import pandas as pd
